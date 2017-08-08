@@ -114,12 +114,13 @@ func Close() {
 // and will run until a QUIT, INT, or TERM signal is
 // received, or until the queues are empty if the
 // -exit-on-complete flag is set.
-func Work() error {
+func Work(workMonitor *sync.WaitGroup) error {
 	err := Init()
 	if err != nil {
 		return err
 	}
 	defer Close()
+	defer workMonitor.Done()
 
 	quit := signals()
 
